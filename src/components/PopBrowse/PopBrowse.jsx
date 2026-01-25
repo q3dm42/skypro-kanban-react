@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const PopBrowse = () => {
   return (
@@ -95,19 +95,13 @@ const PopBrowse = () => {
                       <div className="calendar__cell _other-month">30</div>
                       <div className="calendar__cell _cell-day">31</div>
                       <div className="calendar__cell _cell-day">1</div>
-                      <div className="calendar__cell _cell-day _weekend">
-                        2
-                      </div>
-                      <div className="calendar__cell _cell-day _weekend">
-                        3
-                      </div>
+                      <div className="calendar__cell _cell-day _weekend">2</div>
+                      <div className="calendar__cell _cell-day _weekend">3</div>
                       <div className="calendar__cell _cell-day">4</div>
                       <div className="calendar__cell _cell-day">5</div>
                       <div className="calendar__cell _cell-day ">6</div>
                       <div className="calendar__cell _cell-day">7</div>
-                      <div className="calendar__cell _cell-day _current">
-                        8
-                      </div>
+                      <div className="calendar__cell _cell-day _current">8</div>
                       <div className="calendar__cell _cell-day _weekend _active-day">
                         9
                       </div>
@@ -150,11 +144,7 @@ const PopBrowse = () => {
                     </div>
                   </div>
 
-                  <input
-                    type="hidden"
-                    id="datepick_value"
-                    value="08.09.2023"
-                  />
+                  <input type="hidden" id="datepick_value" value="08.09.2023" />
                   <div className="calendar__period">
                     <p className="calendar__p date-end">
                       Срок исполнения:{" "}
