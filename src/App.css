@@ -1225,3 +1225,10 @@ body {
     display: block;
   }
 }
+
+.loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #94A6BE;
+}
