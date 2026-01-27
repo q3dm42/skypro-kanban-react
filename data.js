@@ -5,7 +5,7 @@ const data = [
     title: "Название задачи 1",
     date: "30.10.23",
     status: "Без статуса",
-    themeClass: "_orange"
+    themeClass: "_orange",
   },
   {
     id: 2,
@@ -13,7 +13,7 @@ const data = [
     title: "Название задачи 2",
     date: "31.10.23",
     status: "Нужен ревью",
-    themeClass: "_green"
+    themeClass: "_green",
   },
   {
     id: 3,
@@ -21,7 +21,7 @@ const data = [
     title: "Название задачи 3",
     date: "01.11.23",
     status: "В работе",
-    themeClass: "_purple"
+    themeClass: "_purple",
   },
   {
     id: 4,
@@ -29,7 +29,7 @@ const data = [
     title: "Название задачи 4",
     date: "02.11.23",
     status: "Тестирование",
-    themeClass: "_orange"
+    themeClass: "_orange",
   },
   {
     id: 5,
@@ -37,9 +37,8 @@ const data = [
     title: "Название задачи 5",
     date: "03.11.23",
     status: "Готово",
-    themeClass: "_green"
+    themeClass: "_green",
   },
-
 ];
 
 export default data;

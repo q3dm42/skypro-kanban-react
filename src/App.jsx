@@ -21,7 +21,7 @@ function App() {
     "Нужен ревью",
     "В работе",
     "Тестирование",
-    "Готово"
+    "Готово",
   ];
 
   const renderCard = (card) => (
@@ -108,7 +108,9 @@ function App() {
                         <p>{column}</p>
                       </div>
                       <div className="cards">
-                        {data.filter(card => card.status === column).map(renderCard)}
+                        {data
+                          .filter((card) => card.status === column)
+                          .map(renderCard)}
                       </div>
                     </div>
                   ))

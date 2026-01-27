@@ -25,13 +25,17 @@ const Header = () => {
             <button className="header__btn-main-new _hover01" id="btnMainNew">
               <a href="#popNewCard">Создать новую задачу</a>
             </button>
-            <a href="#user-set-target" className="header__user _hover02" onClick={toggleUserModal}>
+            <a
+              href="#user-set-target"
+              className="header__user _hover02"
+              onClick={toggleUserModal}
+            >
               Ivan Ivanov
             </a>
             <div
               className="header__pop-user-set pop-user-set"
               id="user-set-target"
-              style={{ display: isUserModalVisible ? 'block' : 'none' }}
+              style={{ display: isUserModalVisible ? "block" : "none" }}
             >
               {/* <a href="">x</a> */}
               <p className="pop-user-set__name">Ivan Ivanov</p>
