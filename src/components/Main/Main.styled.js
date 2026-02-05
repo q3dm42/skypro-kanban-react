@@ -8,12 +8,12 @@ export const AppWrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: #EAEEF6;
+  background-color: #eaeef6;
 `;
 
 export const MainWrapper = styled.div`
   width: 100%;
-  background-color: #EAEEF6;
+  background-color: #eaeef6;
 `;
 
 export const Container = styled.div`

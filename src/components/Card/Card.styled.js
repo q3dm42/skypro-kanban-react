@@ -10,7 +10,7 @@ export const CardItem = styled.div`
 export const CardWrapper = styled.div`
   width: 220px;
   height: 130px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -45,23 +45,23 @@ export const CardTheme = styled.div`
   letter-spacing: 0.5px;
 
   &._orange {
-    background-color: #FFE4C2;
-    color: #FF6D00;
+    background-color: #ffe4c2;
+    color: #ff6d00;
   }
 
   &._green {
-    background-color: #B4FDD1;
-    color: #06B16E;
+    background-color: #b4fdd1;
+    color: #06b16e;
   }
 
   &._purple {
-    background-color: #E9D4FF;
-    color: #9A48F1;
+    background-color: #e9d4ff;
+    color: #9a48f1;
   }
 
   &._gray {
-    background: #94A6BE;
-    color: #FFFFFF;
+    background: #94a6be;
+    color: #ffffff;
   }
 `;
 
@@ -89,7 +89,7 @@ export const CardDate = styled.div`
   align-items: center;
   gap: 5px;
   font-size: 12px;
-  color: #94A6BE;
+  color: #94a6be;
   margin-top: auto;
 
   p {
@@ -109,6 +109,6 @@ export const CardBtn = styled.div`
     width: 4px;
     height: 4px;
     border-radius: 50%;
-    background-color: #94A6BE;
+    background-color: #94a6be;
   }
 `;
