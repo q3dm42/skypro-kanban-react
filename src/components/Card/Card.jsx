@@ -1,26 +1,34 @@
 import React from "react";
+import {
+  CardItem,
+  CardWrapper,
+  CardGroup,
+  CardTheme,
+  CardTitle,
+  CardContent,
+  CardDate,
+  CardBtn,
+} from "./Card.styled";
 
 const Card = ({ theme, themeClass, title, date }) => {
   return (
-    <div className="cards__item">
-      <div className="cards__card card">
-        <div className="card__group">
-          <div className={`card__theme ${themeClass}`}>
-            <p className={themeClass}>{theme}</p>
-          </div>
+    <CardItem>
+      <CardWrapper className={themeClass}>
+        <CardGroup>
+          <CardTheme className={themeClass}>{theme}</CardTheme>
           <a href="#popBrowse" target="_self">
-            <div className="card__btn">
+            <CardBtn>
               <div></div>
               <div></div>
               <div></div>
-            </div>
+            </CardBtn>
           </a>
-        </div>
-        <div className="card__content">
+        </CardGroup>
+        <CardContent>
           <a href="" target="_blank">
-            <h3 className="card__title">{title}</h3>
+            <CardTitle>{title}</CardTitle>
           </a>
-          <div className="card__date">
+          <CardDate>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="13"
@@ -50,10 +58,10 @@ const Card = ({ theme, themeClass, title, date }) => {
               </defs>
             </svg>
             <p>{date}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </CardDate>
+        </CardContent>
+      </CardWrapper>
+    </CardItem>
   );
 };
 
