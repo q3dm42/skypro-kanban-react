@@ -22,6 +22,12 @@ const columns = [
 
 let hasShownInitialLoader = false;
 
+const topicToThemeClass = {
+  "Web Design": "_orange",
+  Research: "_green",
+  Copywriting: "_purple",
+};
+
 const HomePage = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(!hasShownInitialLoader);
@@ -56,10 +62,10 @@ const HomePage = () => {
 
   const renderCard = (card) => (
     <Card
-      key={card.id}
-      id={card.id}
+      key={card._id}
+      id={card._id}
       theme={card.topic}
-      themeClass={card.themeClass}
+      themeClass={topicToThemeClass[card.topic] || "_green"}
       title={card.title}
       date={card.date}
     />
