@@ -2,10 +2,51 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HomePage from "./HomePage";
 import TaskCalendar from "../components/TaskCalendar/TaskCalendar";
+import { createTask } from "../services/kanban";
 
 const AddTaskPage = () => {
   const navigate = useNavigate();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [topic, setTopic] = useState("Research");
   const [selectedDate, setSelectedDate] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const topics = [
+    { id: 1, name: "Web Design", value: "Web Design", color: "_orange" },
+    { id: 2, name: "Research", value: "Research", color: "_green" },
+    { id: 3, name: "Copywriting", value: "Copywriting", color: "_purple" },
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    // Валидация
+    if (!title.trim()) {
+      setError("Название задачи не должно быть пусто");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const taskData = {
+        title: title.trim(),
+        description: description.trim(),
+        topic: topic,
+        date: selectedDate ? selectedDate.toISOString().split("T")[0] : new Date().toISOString().split("T")[0],
+        status: "Без статуса",
+      };
+      
+      await createTask(taskData);
+      navigate("/");
+    } catch (err) {
+      setError(err.message || "Ошибка создания задачи");
+      setLoading(false);
+    }
+  };
 
   const closeModal = () => {
     navigate("/");
@@ -18,9 +59,11 @@ const AddTaskPage = () => {
         <div className="pop-new-card__container">
           <div className="pop-new-card__block">
             <div className="pop-new-card__content">
-              <h3 className="pop-new-card__ttl">Создание задачи</h3>
+              <h3 className="pop-new-card__ttl">
+                {error ? <span style={{ color: "#d32f2f" }}>{error}</span> : "Создание задачи"}
+              </h3>
               <div className="pop-new-card__wrap">
-                <form className="pop-new-card__form form-new">
+                <form className="pop-new-card__form form-new" onSubmit={handleSubmit}>
                   <div className="form-new__block">
                     <label htmlFor="formTitle" className="subttl">
                       Название задачи
@@ -32,6 +75,9 @@ const AddTaskPage = () => {
                       id="formTitle"
                       placeholder="Введите название задачи..."
                       autoFocus
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      disabled={loading}
                     />
                   </div>
                   <div className="form-new__block">
@@ -43,20 +89,24 @@ const AddTaskPage = () => {
                       name="text"
                       id="textArea"
                       placeholder="Введите описание задачи..."
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      disabled={loading}
                     ></textarea>
                   </div>
                   <div className="pop-new-card__categories categories">
                     <p className="categories__p subttl">Категория</p>
                     <div className="categories__themes">
-                      <div className="categories__theme _orange _active-category">
-                        <p className="_orange">Web Design</p>
-                      </div>
-                      <div className="categories__theme _green">
-                        <p className="_green">Research</p>
-                      </div>
-                      <div className="categories__theme _purple">
-                        <p className="_purple">Copywriting</p>
-                      </div>
+                      {topics.map((t) => (
+                        <div
+                          key={t.id}
+                          className={`categories__theme ${t.color} ${topic === t.value ? "_active-category" : ""}`}
+                          onClick={() => setTopic(t.value)}
+                          style={{ cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.5 : 1 }}
+                        >
+                          <p className={t.color}>{t.name}</p>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </form>
@@ -77,15 +127,17 @@ const AddTaskPage = () => {
                 <button
                   type="button"
                   className="form-new__create _hover01"
-                  onClick={closeModal}
+                  onClick={handleSubmit}
+                  disabled={loading}
                 >
-                  Создать задачу
+                  {loading ? "Создаём..." : "Создать задачу"}
                 </button>
                 <button
                   type="button"
                   className="_btn-bor _hover03"
                   onClick={closeModal}
-                  style={{ padding: "0 14px" }}
+                  style={{ padding: "0 14px", opacity: loading ? 0.5 : 1 }}
+                  disabled={loading}
                 >
                   Закрыть
                 </button>
