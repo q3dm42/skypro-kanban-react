@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import { themeColors } from "../utils/themeColors";
+import { login } from "../services/auth";
+import { useAuth } from "../context/AuthContext";
 
 const Page = styled.main`
 	min-height: 100vh;
@@ -79,13 +81,42 @@ const Hint = styled.p`
 	}
 `;
 
-const LoginPage = ({ onLogin }) => {
-	const navigate = useNavigate();
+const ErrorMessage = styled.p`
+	color: #d32f2f;
+	font-size: 13px;
+	margin-bottom: 16px;
+	text-align: center;
+`;
 
-	const handleSubmit = (event) => {
+const LoginPage = () => {
+	const navigate = useNavigate();
+	const { handleLogin } = useAuth();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
+	const [loading, setLoading] = useState(false);
+
+	const handleSubmit = async (event) => {
 		event.preventDefault();
-		onLogin();
-		navigate("/");
+		setError("");
+		setLoading(true);
+
+		// Базовая валидация
+		if (!email.trim() || !password.trim()) {
+			setError("Email и пароль не должны быть пусты");
+			setLoading(false);
+			return;
+		}
+
+		try {
+			await login(email, password);
+			handleLogin();
+			navigate("/");
+		} catch (err) {
+			setError(err.message || "Ошибка входа. Проверьте данные.");
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	return (
@@ -93,16 +124,33 @@ const LoginPage = ({ onLogin }) => {
 			<Card>
 				<Title>Вход</Title>
 				<Subtitle>Добро пожаловать! Введите данные для входа.</Subtitle>
+				{error && <ErrorMessage>{error}</ErrorMessage>}
 				<form onSubmit={handleSubmit}>
 					<Field>
 						Email
-						<input type="email" name="email" placeholder="email@example.com" />
+						<input
+							type="email"
+							name="email"
+							placeholder="email@example.com"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							disabled={loading}
+						/>
 					</Field>
 					<Field>
 						Пароль
-						<input type="password" name="password" placeholder="Введите пароль" />
+						<input
+							type="password"
+							name="password"
+							placeholder="Введите пароль"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							disabled={loading}
+						/>
 					</Field>
-					<SubmitButton type="submit">Войти</SubmitButton>
+					<SubmitButton type="submit" disabled={loading}>
+						{loading ? "Входим..." : "Войти"}
+					</SubmitButton>
 				</form>
 				<Hint>
 					Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
