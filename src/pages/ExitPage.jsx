@@ -9,12 +9,16 @@ import {
 	PopExitBtnYes,
 	PopExitBtnNo,
 } from "../components/PopUser/PopUser.styled";
+import { logout } from "../services/auth";
+import { useAuth } from "../context/AuthContext";
 
-const ExitPage = ({ onLogout }) => {
+const ExitPage = () => {
 	const navigate = useNavigate();
+	const { handleLogout } = useAuth();
 
 	const handleConfirm = () => {
-		onLogout();
+		logout();
+		handleLogout();
 		navigate("/login");
 	};
 
