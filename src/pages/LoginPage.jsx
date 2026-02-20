@@ -91,7 +91,7 @@ const ErrorMessage = styled.p`
 const LoginPage = () => {
 	const navigate = useNavigate();
 	const { handleLogin } = useAuth();
-	const [email, setEmail] = useState("");
+	const [loginValue, setLoginValue] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -102,14 +102,14 @@ const LoginPage = () => {
 		setLoading(true);
 
 		// Базовая валидация
-		if (!email.trim() || !password.trim()) {
-			setError("Email и пароль не должны быть пусты");
+		if (!loginValue.trim() || !password.trim()) {
+			setError("Логин и пароль не должны быть пусты");
 			setLoading(false);
 			return;
 		}
 
 		try {
-			await login(email, password);
+			await login(loginValue, password);
 			handleLogin();
 			navigate("/");
 		} catch (err) {
@@ -127,13 +127,13 @@ const LoginPage = () => {
 				{error && <ErrorMessage>{error}</ErrorMessage>}
 				<form onSubmit={handleSubmit}>
 					<Field>
-						Email
+						Логин
 						<input
-							type="email"
-							name="email"
-							placeholder="email@example.com"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
+							type="text"
+							name="login"
+							placeholder="Введите логин"
+							value={loginValue}
+							onChange={(e) => setLoginValue(e.target.value)}
 							disabled={loading}
 						/>
 					</Field>

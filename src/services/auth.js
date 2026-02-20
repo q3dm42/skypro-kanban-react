@@ -4,13 +4,13 @@ import { API_ENDPOINTS } from "../config/api";
 /**
  * Регистрация пользователя
  * @param {string} name - имя пользователя
- * @param {string} email - email
+ * @param {string} login - логин
  * @param {string} password - пароль
  */
-export async function register(name, email, password) {
+export async function register(name, login, password) {
 	const response = await apiPost(API_ENDPOINTS.REGISTER, {
 		name,
-		email,
+		login,
 		password,
 	});
 
@@ -24,17 +24,17 @@ export async function register(name, email, password) {
 
 /**
  * Вход в систему
- * @param {string} email - email
+ * @param {string} login - логин
  * @param {string} password - пароль
  */
-export async function login(email, password) {
+export async function login(login, password) {
 	const response = await apiPost(API_ENDPOINTS.LOGIN, {
-		email,
+		login,
 		password,
 	});
 
-	if (response.token) {
-		localStorage.setItem("authToken", response.token);
+	if (response.user && response.user.token) {
+		localStorage.setItem("authToken", response.user.token);
 		localStorage.setItem("user", JSON.stringify(response.user));
 	}
 

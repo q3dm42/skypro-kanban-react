@@ -6,6 +6,6 @@ export const API_ENDPOINTS = {
 	KANBAN_TASK_BY_ID: (id) => `/kanban/${id}`,
 
 	// Auth
-	LOGIN: "/auth/login",
-	REGISTER: "/auth/register",
+	LOGIN: "/user/login",
+	REGISTER: "/user",
 };

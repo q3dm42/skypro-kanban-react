@@ -92,7 +92,7 @@ const RegisterPage = () => {
 	const navigate = useNavigate();
 	const { handleLogin } = useAuth();
 	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
+	const [login, setLogin] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -103,7 +103,7 @@ const RegisterPage = () => {
 		setLoading(true);
 
 		// Базовая валидация
-		if (!name.trim() || !email.trim() || !password.trim()) {
+		if (!name.trim() || !login.trim() || !password.trim()) {
 			setError("Все поля должны быть заполнены");
 			setLoading(false);
 			return;
@@ -116,7 +116,7 @@ const RegisterPage = () => {
 		}
 
 		try {
-			await register(name, email, password);
+			await register(name, login, password);
 			handleLogin();
 			navigate("/");
 		} catch (err) {
@@ -145,13 +145,13 @@ const RegisterPage = () => {
 						/>
 					</Field>
 					<Field>
-						Email
+						Логин
 						<input
-							type="email"
-							name="email"
-							placeholder="email@example.com"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
+							type="text"
+							name="login"
+							placeholder="Введите логин"
+							value={login}
+							onChange={(e) => setLogin(e.target.value)}
 							disabled={loading}
 						/>
 					</Field>
