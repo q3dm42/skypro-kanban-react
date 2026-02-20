@@ -25,7 +25,7 @@ export const ColumnTitle = styled.div`
   p {
     color: #94a6be;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1;
     text-transform: uppercase;
   }
