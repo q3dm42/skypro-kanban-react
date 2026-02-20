@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { GlobalStyle } from "../../utils/GlobalStyle";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
@@ -9,27 +9,25 @@ import AddTaskPage from "../../pages/AddTaskPage";
 import CardPage from "../../pages/CardPage";
 import ExitPage from "../../pages/ExitPage";
 import NotFoundPage from "../../pages/NotFoundPage";
+import { useAuth } from "../../context/AuthContext";
 
 const AppRoutes = () => {
-  const [isAuth, setIsAuth] = useState(false);
+	const { isAuth } = useAuth();
 
-  const handleLogin = () => setIsAuth(true);
-  const handleLogout = () => setIsAuth(false);
-
-  return (
-    <>
-      <GlobalStyle />
-      <Routes>
-        <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
-        <Route
-          path="/register"
-          element={<RegisterPage onRegister={handleLogin} />}
-        />
-        <Route element={<ProtectedRoute isAuth={isAuth} />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/card/new" element={<AddTaskPage />} />
-          <Route path="/card/:id" element={<CardPage />} />
-          <Route path="/exit" element={<ExitPage onLogout={handleLogout} />} />
+	return (
+		<>
+			<GlobalStyle />
+			<Routes>
+				<Route path="/login" element={<LoginPage />} />
+				<Route
+					path="/register"
+					element={<RegisterPage />}
+				/>
+				<Route element={<ProtectedRoute isAuth={isAuth} />}>
+					<Route path="/" element={<HomePage />} />
+					<Route path="/card/new" element={<AddTaskPage />} />
+					<Route path="/card/:id" element={<CardPage />} />
+					<Route path="/exit" element={<ExitPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
