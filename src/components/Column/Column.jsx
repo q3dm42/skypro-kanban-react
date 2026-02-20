@@ -1,13 +1,14 @@
 import React from "react";
+import { ColumnWrapper, ColumnTitle, CardsWrapper } from "./Column.styled";
 
 const Column = ({ title, cards }) => {
   return (
-    <div className="main__column column">
-      <div className="column__title">
+    <ColumnWrapper>
+      <ColumnTitle>
         <p>{title}</p>
-      </div>
-      <div className="cards">{cards}</div>
-    </div>
+      </ColumnTitle>
+      <CardsWrapper>{cards}</CardsWrapper>
+    </ColumnWrapper>
   );
 };
 

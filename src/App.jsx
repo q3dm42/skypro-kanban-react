@@ -1,5 +1,14 @@
-import "./App.css";
 import { useState, useEffect } from "react";
+import "./App.css";
+import { GlobalStyle } from "./utils/GlobalStyle";
+import {
+  AppWrapper,
+  MainWrapper,
+  Container,
+  MainBlock,
+  MainContent,
+  Loading,
+} from "./components/Main/Main.styled";
 import Header from "./components/Header/Header";
 import PopNewCard from "./components/PopNewCard/PopNewCard";
 import PopBrowse from "./components/PopBrowse/PopBrowse";
@@ -10,13 +19,19 @@ import data from "../data.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [isPopExitVisible, setIsPopExitVisible] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000); // Имитация загрузки 2 секунды
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleExitClick = (e) => {
+    e.preventDefault();
+    setIsPopExitVisible(true);
+  };
 
   const columns = [
     "Без статуса",
@@ -37,44 +52,36 @@ function App() {
   );
 
   return (
-    <>
-      <div className="wrapper">
-        {/* pop-up start*/}
-
-        <PopUser />
-
-        <PopNewCard />
-
-        <PopBrowse />
-
-        {/* pop-up end*/}
-
-        <Header />
-        <main className="main">
-          <div className="container">
-            <div className="main__block">
-              <div className="main__content">
-                {loading ? (
-                  <div className="loading">
-                    <p>Данные загружаются</p>
-                  </div>
-                ) : (
-                  columns.map((column) => (
-                    <Column
-                      key={column}
-                      title={column}
-                      cards={data
-                        .filter((card) => card.status === column)
-                        .map(renderCard)}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-    </>
+    <AppWrapper>
+      <GlobalStyle />
+      <PopUser isModalVisible={isPopExitVisible} />
+      <PopNewCard />
+      <PopBrowse />
+      <Header />
+      <MainWrapper>
+        <Container>
+          <MainBlock>
+            <MainContent>
+              {loading ? (
+                <Loading>
+                  <p>Данные загружаются</p>
+                </Loading>
+              ) : (
+                columns.map((column) => (
+                  <Column
+                    key={column}
+                    title={column}
+                    cards={data
+                      .filter((card) => card.status === column)
+                      .map(renderCard)}
+                  />
+                ))
+              )}
+            </MainContent>
+          </MainBlock>
+        </Container>
+      </MainWrapper>
+    </AppWrapper>
   );
 }
 
