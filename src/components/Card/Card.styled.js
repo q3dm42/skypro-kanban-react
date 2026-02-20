@@ -40,7 +40,7 @@ export const CardTheme = styled.div`
   padding: 5px 14px;
   border-radius: 18px;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 
@@ -67,7 +67,7 @@ export const CardTheme = styled.div`
 
 export const CardTitle = styled.h3`
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: #000000;
   margin: 0;
   line-height: 1.3;
