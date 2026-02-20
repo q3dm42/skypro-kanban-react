@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header/Header";
 import Column from "../components/Column/Column";
 import Card from "../components/Card/Card";
-import data from "../../data.js";
+import { getTasks } from "../services/kanban";
 import {
   AppWrapper,
   MainWrapper,
@@ -23,20 +23,35 @@ const columns = [
 let hasShownInitialLoader = false;
 
 const HomePage = () => {
+  const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(!hasShownInitialLoader);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (hasShownInitialLoader) {
-      setLoading(false);
-      return;
+    const fetchTasks = async () => {
+      try {
+        const fetchedTasks = await getTasks();
+        setTasks(fetchedTasks);
+      } catch (err) {
+        setError(err.message || "Ошибка загрузки задач");
+      } finally {
+        if (!hasShownInitialLoader) {
+          hasShownInitialLoader = true;
+        }
+        setLoading(false);
+      }
+    };
+
+    if (!hasShownInitialLoader) {
+      // Показываем лоадер хотя бы 2 секунды при первой загрузке
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+      fetchTasks();
+      return () => clearTimeout(timer);
+    } else {
+      fetchTasks();
     }
-
-    const timer = setTimeout(() => {
-      hasShownInitialLoader = true;
-      setLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
   }, []);
 
   const renderCard = (card) => (
@@ -61,12 +76,16 @@ const HomePage = () => {
                 <Loading>
                   <p>Данные загружаются</p>
                 </Loading>
+              ) : error ? (
+                <Loading>
+                  <p style={{ color: "#d32f2f" }}>Ошибка: {error}</p>
+                </Loading>
               ) : (
                 columns.map((column) => (
                   <Column
                     key={column}
                     title={column}
-                    cards={data
+                    cards={tasks
                       .filter((card) => card.status === column)
                       .map(renderCard)}
                   />
