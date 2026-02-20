@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { isValid, parse } from "date-fns";
+import { parseISO } from "date-fns";
 import HomePage from "./HomePage";
 import TaskCalendar from "../components/TaskCalendar/TaskCalendar";
 import { getTaskById, updateTask, deleteTask } from "../services/kanban";
@@ -15,14 +15,14 @@ const statuses = [
 
 const topicColors = {
   "Web Design": "_orange",
-  "Research": "_green",
-  "Copywriting": "_purple",
+  Research: "_green",
+  Copywriting: "_purple",
 };
 
 const CardPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   const [task, setTask] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -43,12 +43,14 @@ const CardPage = () => {
         setDescription(fetchedTask.description || "");
         setStatus(fetchedTask.status || "Без статуса");
         setTopic(fetchedTask.topic || "Research");
-        
-        // Парсим дату
+
+        // Парсим дату (API возвращает ISO формат)
         if (fetchedTask.date) {
-          const parsedDate = parse(fetchedTask.date, "dd.MM.yy", new Date());
-          if (isValid(parsedDate)) {
+          try {
+            const parsedDate = parseISO(fetchedTask.date);
             setSelectedDate(parsedDate);
+          } catch (e) {
+            // Если не удалось спарсить, оставляем null
           }
         }
       } catch (err) {
@@ -71,7 +73,7 @@ const CardPage = () => {
         description: description.trim(),
         status: status,
         topic: topic,
-        date: selectedDate ? selectedDate.toISOString().split("T")[0] : task.date,
+        date: selectedDate ? selectedDate.toISOString() : task.date,
       };
 
       await updateTask(id, updatedData);
@@ -108,7 +110,10 @@ const CardPage = () => {
         <div className="pop-browse" style={{ display: "block" }}>
           <div className="pop-browse__container">
             <div className="pop-browse__block">
-              <div className="pop-browse__content" style={{ textAlign: "center", padding: "40px" }}>
+              <div
+                className="pop-browse__content"
+                style={{ textAlign: "center", padding: "40px" }}
+              >
                 <p>Загрузка задачи...</p>
               </div>
             </div>
@@ -125,7 +130,10 @@ const CardPage = () => {
         <div className="pop-browse" style={{ display: "block" }}>
           <div className="pop-browse__container">
             <div className="pop-browse__block">
-              <div className="pop-browse__content" style={{ textAlign: "center", padding: "40px" }}>
+              <div
+                className="pop-browse__content"
+                style={{ textAlign: "center", padding: "40px" }}
+              >
                 <p style={{ color: "#d32f2f" }}>Задача не найдена</p>
               </div>
             </div>
@@ -144,10 +152,16 @@ const CardPage = () => {
             <div className="pop-browse__content">
               <div className="pop-browse__top-block">
                 <h3 className="pop-browse__ttl">
-                  {error ? <span style={{ color: "#d32f2f" }}>{error}</span> : task.title}
+                  {error ? (
+                    <span style={{ color: "#d32f2f" }}>{error}</span>
+                  ) : (
+                    task.title
+                  )}
                 </h3>
                 <div className="card__theme">
-                  <p className={`${topicColors[topic] || "_green"} _active-category`}>
+                  <p
+                    className={`${topicColors[topic] || "_green"} _active-category`}
+                  >
                     {topic}
                   </p>
                 </div>

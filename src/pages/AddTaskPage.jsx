@@ -36,10 +36,10 @@ const AddTaskPage = () => {
         title: title.trim(),
         description: description.trim(),
         topic: topic,
-        date: selectedDate ? selectedDate.toISOString().split("T")[0] : new Date().toISOString().split("T")[0],
+        date: selectedDate ? selectedDate.toISOString() : new Date().toISOString(),
         status: "Без статуса",
       };
-      
+
       await createTask(taskData);
       navigate("/");
     } catch (err) {
@@ -60,10 +60,17 @@ const AddTaskPage = () => {
           <div className="pop-new-card__block">
             <div className="pop-new-card__content">
               <h3 className="pop-new-card__ttl">
-                {error ? <span style={{ color: "#d32f2f" }}>{error}</span> : "Создание задачи"}
+                {error ? (
+                  <span style={{ color: "#d32f2f" }}>{error}</span>
+                ) : (
+                  "Создание задачи"
+                )}
               </h3>
               <div className="pop-new-card__wrap">
-                <form className="pop-new-card__form form-new" onSubmit={handleSubmit}>
+                <form
+                  className="pop-new-card__form form-new"
+                  onSubmit={handleSubmit}
+                >
                   <div className="form-new__block">
                     <label htmlFor="formTitle" className="subttl">
                       Название задачи
@@ -102,7 +109,10 @@ const AddTaskPage = () => {
                           key={t.id}
                           className={`categories__theme ${t.color} ${topic === t.value ? "_active-category" : ""}`}
                           onClick={() => setTopic(t.value)}
-                          style={{ cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.5 : 1 }}
+                          style={{
+                            cursor: loading ? "not-allowed" : "pointer",
+                            opacity: loading ? 0.5 : 1,
+                          }}
                         >
                           <p className={t.color}>{t.name}</p>
                         </div>

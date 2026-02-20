@@ -5,16 +5,16 @@ import { API_ENDPOINTS } from "../config/api";
  * Получить все задачи
  */
 export async function getTasks() {
-	const response = await apiGet(API_ENDPOINTS.KANBAN_TASKS);
-	return response.tasks || [];
+  const response = await apiGet(API_ENDPOINTS.KANBAN_TASKS);
+  return response.tasks || [];
 }
 
 /**
  * Получить задачу по ID
  */
 export async function getTaskById(id) {
-	const response = await apiGet(API_ENDPOINTS.KANBAN_TASK_BY_ID(id));
-	return response.task;
+  const response = await apiGet(API_ENDPOINTS.KANBAN_TASK_BY_ID(id));
+  return response.task;
 }
 
 /**
@@ -27,16 +27,16 @@ export async function getTaskById(id) {
  * @param {string} taskData.date - дата
  */
 export async function createTask(taskData) {
-	const payload = {
-		title: taskData.title || "Новая задача",
-		topic: taskData.topic || "Research",
-		status: taskData.status || "Без статуса",
-		description: taskData.description || "",
-		date: taskData.date || new Date().toISOString(),
-	};
+  const payload = {
+    title: taskData.title || "Новая задача",
+    topic: taskData.topic || "Research",
+    status: taskData.status || "Без статуса",
+    description: taskData.description || "",
+    date: taskData.date || new Date().toISOString(),
+  };
 
-	const response = await apiPost(API_ENDPOINTS.KANBAN_TASKS, payload);
-	return response.tasks || [];
+  const response = await apiPost(API_ENDPOINTS.KANBAN_TASKS, payload);
+  return response.tasks || [];
 }
 
 /**
@@ -45,16 +45,16 @@ export async function createTask(taskData) {
  * @param {Object} taskData - данные для обновления
  */
 export async function updateTask(id, taskData) {
-	const payload = {
-		title: taskData.title || "Новая задача",
-		topic: taskData.topic || "Research",
-		status: taskData.status || "Без статуса",
-		description: taskData.description || "",
-		date: taskData.date || new Date().toISOString(),
-	};
+  const payload = {
+    title: taskData.title || "Новая задача",
+    topic: taskData.topic || "Research",
+    status: taskData.status || "Без статуса",
+    description: taskData.description || "",
+    date: taskData.date || new Date().toISOString(),
+  };
 
-	const response = await apiPut(API_ENDPOINTS.KANBAN_TASK_BY_ID(id), payload);
-	return response.tasks || [];
+  const response = await apiPut(API_ENDPOINTS.KANBAN_TASK_BY_ID(id), payload);
+  return response.tasks || [];
 }
 
 /**
@@ -62,6 +62,6 @@ export async function updateTask(id, taskData) {
  * @param {string} id - ID задачи
  */
 export async function deleteTask(id) {
-	const response = await apiDelete(API_ENDPOINTS.KANBAN_TASK_BY_ID(id));
-	return response.tasks || [];
+  const response = await apiDelete(API_ENDPOINTS.KANBAN_TASK_BY_ID(id));
+  return response.tasks || [];
 }

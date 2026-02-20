@@ -12,22 +12,19 @@ import NotFoundPage from "../../pages/NotFoundPage";
 import { useAuth } from "../../context/AuthContext";
 
 const AppRoutes = () => {
-	const { isAuth } = useAuth();
+  const { isAuth } = useAuth();
 
-	return (
-		<>
-			<GlobalStyle />
-			<Routes>
-				<Route path="/login" element={<LoginPage />} />
-				<Route
-					path="/register"
-					element={<RegisterPage />}
-				/>
-				<Route element={<ProtectedRoute isAuth={isAuth} />}>
-					<Route path="/" element={<HomePage />} />
-					<Route path="/card/new" element={<AddTaskPage />} />
-					<Route path="/card/:id" element={<CardPage />} />
-					<Route path="/exit" element={<ExitPage />} />
+  return (
+    <>
+      <GlobalStyle />
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route element={<ProtectedRoute isAuth={isAuth} />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/card/new" element={<AddTaskPage />} />
+          <Route path="/card/:id" element={<CardPage />} />
+          <Route path="/exit" element={<ExitPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
