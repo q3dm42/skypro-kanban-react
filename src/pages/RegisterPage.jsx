@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import { themeColors } from "../utils/themeColors";
+import { register } from "../services/auth";
+import { useAuth } from "../context/AuthContext";
 
 const Page = styled.main`
 	min-height: 100vh;
@@ -79,13 +81,49 @@ const Hint = styled.p`
 	}
 `;
 
-const RegisterPage = ({ onRegister }) => {
-	const navigate = useNavigate();
+const ErrorMessage = styled.p`
+	color: #d32f2f;
+	font-size: 13px;
+	margin-bottom: 16px;
+	text-align: center;
+`;
 
-	const handleSubmit = (event) => {
+const RegisterPage = () => {
+	const navigate = useNavigate();
+	const { handleLogin } = useAuth();
+	const [name, setName] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
+	const [loading, setLoading] = useState(false);
+
+	const handleSubmit = async (event) => {
 		event.preventDefault();
-		onRegister();
-		navigate("/");
+		setError("");
+		setLoading(true);
+
+		// Базовая валидация
+		if (!name.trim() || !email.trim() || !password.trim()) {
+			setError("Все поля должны быть заполнены");
+			setLoading(false);
+			return;
+		}
+
+		if (password.length < 3) {
+			setError("Пароль должен быть минимум 3 символа");
+			setLoading(false);
+			return;
+		}
+
+		try {
+			await register(name, email, password);
+			handleLogin();
+			navigate("/");
+		} catch (err) {
+			setError(err.message || "Ошибка регистрации. Проверьте данные.");
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	return (
@@ -93,20 +131,44 @@ const RegisterPage = ({ onRegister }) => {
 			<Card>
 				<Title>Регистрация</Title>
 				<Subtitle>Создайте аккаунт, чтобы управлять задачами.</Subtitle>
+				{error && <ErrorMessage>{error}</ErrorMessage>}
 				<form onSubmit={handleSubmit}>
 					<Field>
 						Имя
-						<input type="text" name="name" placeholder="Введите имя" />
+						<input
+							type="text"
+							name="name"
+							placeholder="Введите имя"
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+							disabled={loading}
+						/>
 					</Field>
 					<Field>
 						Email
-						<input type="email" name="email" placeholder="email@example.com" />
+						<input
+							type="email"
+							name="email"
+							placeholder="email@example.com"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							disabled={loading}
+						/>
 					</Field>
 					<Field>
 						Пароль
-						<input type="password" name="password" placeholder="Создайте пароль" />
+						<input
+							type="password"
+							name="password"
+							placeholder="Создайте пароль"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							disabled={loading}
+						/>
 					</Field>
-					<SubmitButton type="submit">Зарегистрироваться</SubmitButton>
+					<SubmitButton type="submit" disabled={loading}>
+						{loading ? "Регистрируемся..." : "Зарегистрироваться"}
+					</SubmitButton>
 				</form>
 				<Hint>
 					Уже есть аккаунт? <Link to="/login">Войти</Link>
