@@ -36,7 +36,9 @@ const AddTaskPage = () => {
         title: title.trim(),
         description: description.trim(),
         topic: topic,
-        date: selectedDate ? selectedDate.toISOString() : new Date().toISOString(),
+        date: selectedDate
+          ? selectedDate.toISOString()
+          : new Date().toISOString(),
         status: "Без статуса",
       };
 
