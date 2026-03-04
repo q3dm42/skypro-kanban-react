@@ -1,36 +1,6 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
-import { isAuthenticated } from "../services/auth";
+import { createContext, useContext } from "react";
 
-const AuthContext = createContext();
-
-export const AuthProvider = ({ children }) => {
-  const [isAuth, setIsAuth] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  // Проверяем авторизацию при монтировании компонента
-  useEffect(() => {
-    setIsAuth(isAuthenticated());
-    setLoading(false);
-  }, []);
-
-  // Функция для логина
-  const handleLogin = () => {
-    setIsAuth(true);
-  };
-
-  // Функция для логаута
-  const handleLogout = () => {
-    setIsAuth(false);
-  };
-
-  return (
-    <AuthContext.Provider
-      value={{ isAuth, loading, handleLogin, handleLogout }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
+export const AuthContext = createContext();
 
 // Hook для использования AuthContext
 export const useAuth = () => {

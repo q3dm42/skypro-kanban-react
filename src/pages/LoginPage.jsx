@@ -109,8 +109,8 @@ const LoginPage = () => {
     }
 
     try {
-      await login(loginValue, password);
-      handleLogin();
+      const response = await login(loginValue, password);
+      handleLogin(response?.user);
       navigate("/");
     } catch (err) {
       setError(err.message || "Ошибка входа. Проверьте данные.");

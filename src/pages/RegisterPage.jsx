@@ -116,8 +116,8 @@ const RegisterPage = () => {
     }
 
     try {
-      await register(name, login, password);
-      handleLogin();
+      const response = await register(name, login, password);
+      handleLogin(response?.user);
       navigate("/");
     } catch (err) {
       setError(err.message || "Ошибка регистрации. Проверьте данные.");

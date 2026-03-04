@@ -13,9 +13,14 @@ import {
   PopUserSetTheme,
   PopUserSetBtn,
 } from "./Header.styled";
+import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
+  const { user } = useAuth();
+
+  const userName = user?.name || user?.login || "Пользователь";
+  const userLogin = user?.login || "—";
 
   const toggleUserModal = () => {
     setIsUserModalVisible(!isUserModalVisible);
@@ -45,11 +50,11 @@ const Header = () => {
               toggleUserModal();
             }}
           >
-            Ivan Ivanov
+            {userName}
           </HeaderUser>
           <PopUserSet className={isUserModalVisible ? "active" : ""}>
-            <PopUserSetName>Ivan Ivanov</PopUserSetName>
-            <PopUserSetMail>ivan.ivanov@gmail.com</PopUserSetMail>
+            <PopUserSetName>{userName}</PopUserSetName>
+            <PopUserSetMail>{userLogin}</PopUserSetMail>
             <PopUserSetTheme>
               <p>Темная тема</p>
               <input type="checkbox" name="checkbox" />

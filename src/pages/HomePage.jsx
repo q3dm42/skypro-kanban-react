@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header/Header";
 import Column from "../components/Column/Column";
 import Card from "../components/Card/Card";
-import { getTasks } from "../services/kanban";
+import { useTask } from "../context/TaskContext";
 import {
   AppWrapper,
   MainWrapper,
@@ -29,36 +29,20 @@ const topicToThemeClass = {
 };
 
 const HomePage = () => {
-  const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(!hasShownInitialLoader);
-  const [error, setError] = useState("");
+  const { tasks, loading, error, fetchTasks } = useTask();
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const fetchedTasks = await getTasks();
-        setTasks(fetchedTasks);
-      } catch (err) {
-        setError(err.message || "Ошибка загрузки задач");
-      } finally {
-        if (!hasShownInitialLoader) {
-          hasShownInitialLoader = true;
-        }
-        setLoading(false);
-      }
-    };
-
     if (!hasShownInitialLoader) {
       // Показываем лоадер хотя бы 2 секунды при первой загрузке
       const timer = setTimeout(() => {
-        setLoading(false);
+        hasShownInitialLoader = true;
       }, 2000);
       fetchTasks();
       return () => clearTimeout(timer);
     } else {
       fetchTasks();
     }
-  }, []);
+  }, [fetchTasks]);
 
   const renderCard = (card) => (
     <Card

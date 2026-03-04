@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HomePage from "./HomePage";
 import TaskCalendar from "../components/TaskCalendar/TaskCalendar";
-import { createTask } from "../services/kanban";
+import { useTask } from "../context/TaskContext";
 
 const AddTaskPage = () => {
   const navigate = useNavigate();
+  const { createTask } = useTask();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [topic, setTopic] = useState("Research");
@@ -22,23 +23,40 @@ const AddTaskPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
-    // Валидация
+    // Валидация обязательных полей до запроса к API
     if (!title.trim()) {
       setError("Название задачи не должно быть пусто");
-      setLoading(false);
       return;
     }
+
+    if (!description.trim()) {
+      setError("Описание задачи не должно быть пусто");
+      return;
+    }
+
+    if (!topic.trim()) {
+      setError("Нужно выбрать категорию задачи");
+      return;
+    }
+
+    const dateToSend = selectedDate
+      ? selectedDate.toISOString()
+      : new Date().toISOString();
+
+    if (!dateToSend) {
+      setError("Нужно указать дату задачи");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const taskData = {
         title: title.trim(),
         description: description.trim(),
         topic: topic,
-        date: selectedDate
-          ? selectedDate.toISOString()
-          : new Date().toISOString(),
+        date: dateToSend,
         status: "Без статуса",
       };
 
@@ -113,7 +131,7 @@ const AddTaskPage = () => {
                           onClick={() => setTopic(t.value)}
                           style={{
                             cursor: loading ? "not-allowed" : "pointer",
-                            opacity: loading ? 0.5 : 1,
+                            opacity: loading ? 0.5 : undefined,
                           }}
                         >
                           <p className={t.color}>{t.name}</p>

@@ -3,7 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { parseISO } from "date-fns";
 import HomePage from "./HomePage";
 import TaskCalendar from "../components/TaskCalendar/TaskCalendar";
-import { getTaskById, updateTask, deleteTask } from "../services/kanban";
+import { getTaskById } from "../services/kanban";
+import { useTask } from "../context/TaskContext";
 
 const statuses = [
   "Без статуса",
@@ -22,6 +23,7 @@ const topicColors = {
 const CardPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { updateTask, deleteTask } = useTask();
 
   const [task, setTask] = useState(null);
   const [title, setTitle] = useState("");
@@ -49,7 +51,7 @@ const CardPage = () => {
           try {
             const parsedDate = parseISO(fetchedTask.date);
             setSelectedDate(parsedDate);
-          } catch (e) {
+          } catch {
             // Если не удалось спарсить, оставляем null
           }
         }
@@ -64,16 +66,46 @@ const CardPage = () => {
   }, [id]);
 
   const handleSave = async () => {
-    setSaving(true);
     setError("");
+
+    if (!title.trim()) {
+      setError("Название задачи не должно быть пусто");
+      return;
+    }
+
+    if (!description.trim()) {
+      setError("Описание задачи не должно быть пусто");
+      return;
+    }
+
+    if (!topic.trim()) {
+      setError("Категория задачи не должна быть пустой");
+      return;
+    }
+
+    if (!status.trim()) {
+      setError("Статус задачи не должен быть пустым");
+      return;
+    }
+
+    const dateToSend = selectedDate
+      ? selectedDate.toISOString()
+      : task?.date || "";
+
+    if (!dateToSend) {
+      setError("Дата задачи не должна быть пустой");
+      return;
+    }
+
+    setSaving(true);
 
     try {
       const updatedData = {
-        title: title.trim() || "Задача",
+        title: title.trim(),
         description: description.trim(),
         status: status,
         topic: topic,
-        date: selectedDate ? selectedDate.toISOString() : task.date,
+        date: dateToSend,
       };
 
       await updateTask(id, updatedData);

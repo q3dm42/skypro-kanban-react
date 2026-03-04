@@ -196,7 +196,13 @@ export const GlobalStyle = createGlobalStyle`
     margin-bottom: 14px;
   }
 
-  .categories__themes,
+  .categories__themes {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 7px;
+  }
+
   .status__themes {
     display: flex;
     flex-wrap: wrap;
@@ -207,7 +213,7 @@ export const GlobalStyle = createGlobalStyle`
   .categories__theme {
     display: inline-block;
     border-radius: 24px;
-    opacity: 0.4;
+    opacity: 0.8;
   }
 
   .categories__theme p,
