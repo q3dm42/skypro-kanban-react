@@ -79,13 +79,19 @@ const AddTaskPage = () => {
         <div className="pop-new-card__container">
           <div className="pop-new-card__block">
             <div className="pop-new-card__content">
-              <h3 className="pop-new-card__ttl">
-                {error ? (
-                  <span style={{ color: "#d32f2f" }}>{error}</span>
-                ) : (
-                  "Создание задачи"
-                )}
-              </h3>
+              <h3 className="pop-new-card__ttl">Создание задачи</h3>
+              {error && (
+                <p
+                  style={{
+                    color: "#d32f2f",
+                    fontSize: "14px",
+                    marginBottom: "12px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {error}
+                </p>
+              )}
               <div className="pop-new-card__wrap">
                 <form
                   className="pop-new-card__form form-new"

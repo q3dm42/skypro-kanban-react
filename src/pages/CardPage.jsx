@@ -183,13 +183,7 @@ const CardPage = () => {
           <div className="pop-browse__block">
             <div className="pop-browse__content">
               <div className="pop-browse__top-block">
-                <h3 className="pop-browse__ttl">
-                  {error ? (
-                    <span style={{ color: "#d32f2f" }}>{error}</span>
-                  ) : (
-                    task.title
-                  )}
-                </h3>
+                <h3 className="pop-browse__ttl">{task.title}</h3>
                 <div className="card__theme">
                   <p
                     className={`${topicColors[topic] || "_green"} _active-category`}
@@ -198,6 +192,18 @@ const CardPage = () => {
                   </p>
                 </div>
               </div>
+              {error && (
+                <p
+                  style={{
+                    color: "#d32f2f",
+                    fontSize: "14px",
+                    marginBottom: "12px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {error}
+                </p>
+              )}
 
               <div className="pop-browse__status status">
                 <p className="status__p subttl">Статус</p>
