@@ -51,11 +51,18 @@ function App() {
     }
   }, []);
 
+  const isSameTask = (task, id) =>
+    task && (task._id === id || task.id === id || task._id === task.id);
+
   const createTask = useCallback(async (taskData) => {
     setTasksError("");
     try {
-      const updatedTasks = await apiCreateTask(taskData);
-      setTasks(updatedTasks);
+      const result = await apiCreateTask(taskData);
+      if (Array.isArray(result)) {
+        setTasks(result);
+      } else if (result) {
+        setTasks((prevTasks) => [...prevTasks, result]);
+      }
     } catch (err) {
       setTasksError(err.message || "Ошибка создания задачи");
       throw err;
@@ -65,8 +72,14 @@ function App() {
   const updateTask = useCallback(async (id, taskData) => {
     setTasksError("");
     try {
-      const updatedTasks = await apiUpdateTask(id, taskData);
-      setTasks(updatedTasks);
+      const result = await apiUpdateTask(id, taskData);
+      if (Array.isArray(result)) {
+        setTasks(result);
+      } else if (result) {
+        setTasks((prevTasks) =>
+          prevTasks.map((task) => (isSameTask(task, id) ? result : task)),
+        );
+      }
     } catch (err) {
       setTasksError(err.message || "Ошибка обновления задачи");
       throw err;
@@ -76,8 +89,14 @@ function App() {
   const deleteTask = useCallback(async (id) => {
     setTasksError("");
     try {
-      const updatedTasks = await apiDeleteTask(id);
-      setTasks(updatedTasks);
+      const result = await apiDeleteTask(id);
+      if (Array.isArray(result)) {
+        setTasks(result);
+      } else {
+        setTasks((prevTasks) =>
+          prevTasks.filter((task) => !isSameTask(task, id)),
+        );
+      }
     } catch (err) {
       setTasksError(err.message || "Ошибка удаления задачи");
       throw err;

@@ -32,17 +32,19 @@ const HomePage = () => {
   const { tasks, loading, error, fetchTasks } = useTask();
 
   useEffect(() => {
-    if (!hasShownInitialLoader) {
-      // Показываем лоадер хотя бы 2 секунды при первой загрузке
-      const timer = setTimeout(() => {
-        hasShownInitialLoader = true;
-      }, 2000);
-      fetchTasks();
-      return () => clearTimeout(timer);
-    } else {
-      fetchTasks();
+    if (tasks.length === 0) {
+      if (!hasShownInitialLoader) {
+        // Показываем лоадер хотя бы 2 секунды при первой загрузке
+        const timer = setTimeout(() => {
+          hasShownInitialLoader = true;
+        }, 2000);
+        fetchTasks();
+        return () => clearTimeout(timer);
+      } else {
+        fetchTasks();
+      }
     }
-  }, [fetchTasks]);
+  }, [fetchTasks, tasks.length]);
 
   const renderCard = (card) => (
     <Card
@@ -76,7 +78,7 @@ const HomePage = () => {
                     key={column}
                     title={column}
                     cards={tasks
-                      .filter((card) => card.status === column)
+                      .filter((card) => card && card.status === column)
                       .map(renderCard)}
                   />
                 ))

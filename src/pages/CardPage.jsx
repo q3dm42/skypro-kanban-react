@@ -34,6 +34,7 @@ const CardPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
 
   // Загрузка данных задачи
   useEffect(() => {
@@ -109,11 +110,34 @@ const CardPage = () => {
       };
 
       await updateTask(id, updatedData);
+      setIsEditing(false);
       navigate("/");
     } catch (err) {
       setError(err.message || "Ошибка сохранения");
       setSaving(false);
     }
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    // Сбросить изменения к исходным
+    setTitle(task.title || "");
+    setDescription(task.description || "");
+    setStatus(task.status || "Без статуса");
+    setTopic(task.topic || "Research");
+    if (task.date) {
+      try {
+        const parsedDate = parseISO(task.date);
+        setSelectedDate(parsedDate);
+      } catch {
+        setSelectedDate(null);
+      }
+    }
+    setIsEditing(false);
+    setError("");
   };
 
   const handleDelete = async () => {
@@ -183,7 +207,26 @@ const CardPage = () => {
           <div className="pop-browse__block">
             <div className="pop-browse__content">
               <div className="pop-browse__top-block">
-                <h3 className="pop-browse__ttl">{task.title}</h3>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    className="pop-browse__ttl"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Название задачи"
+                    disabled={saving}
+                    style={{
+                      border: "1px solid #ccc",
+                      padding: "8px",
+                      fontSize: "18px",
+                      fontWeight: "bold",
+                      width: "100%",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                ) : (
+                  <h3 className="pop-browse__ttl">{task.title}</h3>
+                )}
                 <div className="card__theme">
                   <p
                     className={`${topicColors[topic] || "_green"} _active-category`}
@@ -214,9 +257,11 @@ const CardPage = () => {
                       className={`status__theme ${
                         status === statusName ? "_active" : ""
                       }`}
-                      onClick={() => setStatus(statusName)}
+                      onClick={
+                        isEditing ? () => setStatus(statusName) : undefined
+                      }
                       style={{
-                        cursor: saving ? "not-allowed" : "pointer",
+                        cursor: isEditing && !saving ? "pointer" : "default",
                         opacity: saving ? 0.5 : 1,
                       }}
                     >
@@ -232,50 +277,78 @@ const CardPage = () => {
                     <label htmlFor="textArea01" className="subttl">
                       Описание задачи
                     </label>
-                    <textarea
-                      className="form-browse__area"
-                      name="text"
-                      id="textArea01"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Введите описание задачи..."
-                      disabled={saving}
-                    ></textarea>
+                    {isEditing ? (
+                      <textarea
+                        className="form-browse__area"
+                        name="text"
+                        id="textArea01"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Введите описание задачи..."
+                        disabled={saving}
+                      ></textarea>
+                    ) : (
+                      <p
+                        className="form-browse__area"
+                        style={{
+                          whiteSpace: "pre-wrap",
+                          border: "none",
+                          padding: "8px",
+                          background: "transparent",
+                        }}
+                      >
+                        {description || "Описание отсутствует"}
+                      </p>
+                    )}
                   </div>
                 </form>
-                <TaskCalendar
-                  selectedDate={selectedDate}
-                  onChange={(date) => setSelectedDate(date)}
-                />
+                {isEditing && (
+                  <TaskCalendar
+                    selectedDate={selectedDate}
+                    onChange={(date) => setSelectedDate(date)}
+                  />
+                )}
               </div>
 
               <div className="pop-browse__btn-edit">
-                <div className="btn-group">
-                  <button
-                    className="btn-edit__edit _btn-bg _hover01"
-                    type="button"
-                    onClick={handleSave}
-                    disabled={saving}
-                  >
-                    {saving ? "Сохраняем..." : "Сохранить"}
-                  </button>
-                  <button
-                    className="btn-edit__edit _btn-bor _hover03"
-                    type="button"
-                    onClick={closeModal}
-                    disabled={saving}
-                  >
-                    Отменить
-                  </button>
-                  <button
-                    className="btn-edit__delete _btn-bor _hover03"
-                    type="button"
-                    onClick={handleDelete}
-                    disabled={saving}
-                  >
-                    {saving ? "Удаляем..." : "Удалить задачу"}
-                  </button>
-                </div>
+                {isEditing ? (
+                  <div className="btn-group">
+                    <button
+                      className="btn-edit__edit _btn-bg _hover01"
+                      type="button"
+                      onClick={handleSave}
+                      disabled={saving}
+                    >
+                      {saving ? "Сохраняем..." : "Сохранить"}
+                    </button>
+                    <button
+                      className="btn-edit__edit _btn-bor _hover03"
+                      type="button"
+                      onClick={handleCancel}
+                      disabled={saving}
+                    >
+                      Отменить
+                    </button>
+                    <button
+                      className="btn-edit__delete _btn-bor _hover03"
+                      type="button"
+                      onClick={handleDelete}
+                      disabled={saving}
+                    >
+                      {saving ? "Удаляем..." : "Удалить задачу"}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="btn-group">
+                    <button
+                      className="btn-edit__edit _btn-bg _hover01"
+                      type="button"
+                      onClick={handleEdit}
+                    >
+                      Редактировать
+                    </button>
+                  </div>
+                )}
                 <button
                   className="btn-edit__close _btn-bg _hover01"
                   type="button"

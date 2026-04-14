@@ -60,7 +60,7 @@ export async function createTask(taskData) {
   };
 
   const response = await apiPost(API_ENDPOINTS.KANBAN_TASKS, payload);
-  return response.tasks || [];
+  return response.tasks || response.task || [];
 }
 
 /**
@@ -80,7 +80,7 @@ export async function updateTask(id, taskData) {
   };
 
   const response = await apiPut(API_ENDPOINTS.KANBAN_TASK_BY_ID(id), payload);
-  return response.tasks || [];
+  return response.tasks || response.task || [];
 }
 
 /**
@@ -89,5 +89,5 @@ export async function updateTask(id, taskData) {
  */
 export async function deleteTask(id) {
   const response = await apiDelete(API_ENDPOINTS.KANBAN_TASK_BY_ID(id));
-  return response.tasks || [];
+  return response.tasks || id;
 }
