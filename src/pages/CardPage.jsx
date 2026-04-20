@@ -251,23 +251,29 @@ const CardPage = () => {
               <div className="pop-browse__status status">
                 <p className="status__p subttl">Статус</p>
                 <div className="status__themes">
-                  {statuses.map((statusName) => (
-                    <div
-                      key={statusName}
-                      className={`status__theme ${
-                        status === statusName ? "_active" : ""
-                      }`}
-                      onClick={
-                        isEditing ? () => setStatus(statusName) : undefined
-                      }
-                      style={{
-                        cursor: isEditing && !saving ? "pointer" : "default",
-                        opacity: saving ? 0.5 : 1,
-                      }}
-                    >
-                      <p>{statusName}</p>
+                  {isEditing ? (
+                    statuses.map((statusName) => (
+                      <div
+                        key={statusName}
+                        className={`status__theme ${
+                          status === statusName ? "_active" : ""
+                        }`}
+                        onClick={
+                          isEditing ? () => setStatus(statusName) : undefined
+                        }
+                        style={{
+                          cursor: isEditing && !saving ? "pointer" : "default",
+                          opacity: saving ? 0.5 : 1,
+                        }}
+                      >
+                        <p>{statusName}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="status__theme _active">
+                      <p>{status}</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
 
@@ -302,12 +308,12 @@ const CardPage = () => {
                     )}
                   </div>
                 </form>
-                {isEditing && (
-                  <TaskCalendar
-                    selectedDate={selectedDate}
-                    onChange={(date) => setSelectedDate(date)}
-                  />
-                )}
+                <TaskCalendar
+                  selectedDate={selectedDate}
+                  onChange={
+                    isEditing ? (date) => setSelectedDate(date) : undefined
+                  }
+                />
               </div>
 
               <div className="pop-browse__btn-edit">
@@ -346,6 +352,14 @@ const CardPage = () => {
                       onClick={handleEdit}
                     >
                       Редактировать
+                    </button>
+                    <button
+                      className="btn-edit__delete _btn-bor _hover03"
+                      type="button"
+                      onClick={handleDelete}
+                      disabled={saving}
+                    >
+                      Удалить задачу
                     </button>
                   </div>
                 )}
