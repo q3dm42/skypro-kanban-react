@@ -23,31 +23,16 @@ function validateTaskPayload(taskData) {
   }
 }
 
-/**
- * Получить все задачи
- */
 export async function getTasks() {
   const response = await apiGet(API_ENDPOINTS.KANBAN_TASKS);
   return response.tasks || [];
 }
 
-/**
- * Получить задачу по ID
- */
 export async function getTaskById(id) {
   const response = await apiGet(API_ENDPOINTS.KANBAN_TASK_BY_ID(id));
   return response.task;
 }
 
-/**
- * Создать новую задачу
- * @param {Object} taskData - данные задачи
- * @param {string} taskData.title - название задачи
- * @param {string} taskData.topic - тема/категория
- * @param {string} taskData.status - статус
- * @param {string} taskData.description - описание
- * @param {string} taskData.date - дата
- */
 export async function createTask(taskData) {
   validateTaskPayload(taskData);
 
@@ -63,11 +48,6 @@ export async function createTask(taskData) {
   return response.tasks || response.task || [];
 }
 
-/**
- * Обновить задачу
- * @param {string} id - ID задачи
- * @param {Object} taskData - данные для обновления
- */
 export async function updateTask(id, taskData) {
   validateTaskPayload(taskData);
 
@@ -83,10 +63,6 @@ export async function updateTask(id, taskData) {
   return response.tasks || response.task || [];
 }
 
-/**
- * Удалить задачу
- * @param {string} id - ID задачи
- */
 export async function deleteTask(id) {
   const response = await apiDelete(API_ENDPOINTS.KANBAN_TASK_BY_ID(id));
   return response.tasks || id;

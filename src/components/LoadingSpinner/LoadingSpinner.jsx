@@ -3,41 +3,79 @@ import { themeColors } from "../../utils/themeColors";
 
 const SpinnerContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 300px;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  padding: 24px;
+`;
+
+const SkeletonBoard = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+  width: 100%;
+`;
+
+const SkeletonColumn = styled.div`
+  display: flex;
   flex-direction: column;
   gap: 16px;
 `;
 
-const Spinner = styled.div`
-  width: 48px;
-  height: 48px;
-  border: 4px solid ${themeColors.borderColor};
-  border-top: 4px solid ${themeColors.primary};
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+const SkeletonHeader = styled.div`
+  width: 80%;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(215, 223, 236, 0.9),
+    rgba(255, 255, 255, 0.7),
+    rgba(215, 223, 236, 0.9)
+  );
+  background-size: 200% 100%;
+  animation: loading 1.6s infinite;
+`;
 
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+const SkeletonCard = styled.div`
+  min-height: 100px;
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    rgba(215, 223, 236, 0.9),
+    rgba(255, 255, 255, 0.7),
+    rgba(215, 223, 236, 0.9)
+  );
+  background-size: 200% 100%;
+  animation: loading 1.6s infinite;
 `;
 
 const LoadingText = styled.p`
   color: ${themeColors.textMuted};
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
+  margin-top: 8px;
 `;
 
 const LoadingSpinner = ({ text = "Загружаем данные..." }) => {
+  const columns = [[120, 80], [100], [120, 90], [110], [100, 80]];
+
   return (
     <SpinnerContainer>
-      <Spinner />
+      <SkeletonBoard>
+        {columns.map((cards, columnIndex) => (
+          <SkeletonColumn key={columnIndex}>
+            <SkeletonHeader
+              style={{ width: columnIndex % 2 === 0 ? "70%" : "85%" }}
+            />
+            {cards.map((height, cardIndex) => (
+              <SkeletonCard
+                key={cardIndex}
+                style={{ minHeight: `${height}px` }}
+              />
+            ))}
+          </SkeletonColumn>
+        ))}
+      </SkeletonBoard>
       <LoadingText>{text}</LoadingText>
     </SpinnerContainer>
   );

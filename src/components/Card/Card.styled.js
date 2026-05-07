@@ -5,6 +5,14 @@ export const CardItem = styled.div`
   animation-name: card-animation;
   animation-duration: 500ms;
   animation-timing-function: linear;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+
+  &._dragging {
+    opacity: 0.45;
+    transform: rotate(1deg);
+  }
 `;
 
 export const CardWrapper = styled.div`
@@ -19,6 +27,14 @@ export const CardWrapper = styled.div`
   padding: 15px 13px 19px;
   cursor: pointer;
   transition: box-shadow 0.2s ease-in-out;
+
+  &[draggable="true"] {
+    cursor: grab;
+  }
+
+  &[draggable="true"]:active {
+    cursor: grabbing;
+  }
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);

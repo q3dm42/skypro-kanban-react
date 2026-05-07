@@ -52,7 +52,7 @@ function App() {
   }, []);
 
   const isSameTask = (task, id) =>
-    task && (task._id === id || task.id === id || task._id === task.id);
+    task && (task._id === id || task.id === id);
 
   const createTask = useCallback(async (taskData) => {
     setTasksError("");

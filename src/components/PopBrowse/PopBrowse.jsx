@@ -1,5 +1,3 @@
-import React from "react";
-
 const PopBrowse = () => {
   return (
     <div className="pop-browse" id="popBrowse">

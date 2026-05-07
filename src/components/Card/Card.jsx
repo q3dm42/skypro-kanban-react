@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { formatDate } from "../../utils/formatDate";
 import {
@@ -12,10 +11,25 @@ import {
   CardBtn,
 } from "./Card.styled";
 
-const Card = ({ id, theme, themeClass, title, date }) => {
+const Card = ({
+  id,
+  theme,
+  themeClass,
+  title,
+  date,
+  draggable = false,
+  isDragging = false,
+  onDragStart,
+  onDragEnd,
+}) => {
   return (
-    <CardItem>
-      <CardWrapper className={themeClass}>
+    <CardItem className={isDragging ? "_dragging" : ""}>
+      <CardWrapper
+        className={themeClass}
+        draggable={draggable}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+      >
         <CardGroup>
           <CardTheme className={themeClass}>{theme}</CardTheme>
           <Link to={`/card/${id}`}>

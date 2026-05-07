@@ -9,9 +9,6 @@ class APIError extends Error {
   }
 }
 
-/**
- * Базовый метод для API запросов с обработкой ошибок
- */
 async function apiRequest(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
   const token = localStorage.getItem("authToken");
@@ -46,7 +43,6 @@ async function apiRequest(endpoint, options = {}) {
       throw error;
     }
 
-    // Network error
     throw new APIError(
       0,
       "Ошибка сети. Проверьте подключение к интернету.",
@@ -55,44 +51,26 @@ async function apiRequest(endpoint, options = {}) {
   }
 }
 
-/**
- * GET запрос
- */
 export function apiGet(endpoint) {
   return apiRequest(endpoint, {
     method: "GET",
   });
 }
 
-/**
- * POST запрос
- */
 export function apiPost(endpoint, data) {
   return apiRequest(endpoint, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
 }
 
-/**
- * PUT запрос
- */
 export function apiPut(endpoint, data) {
   return apiRequest(endpoint, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
 }
 
-/**
- * DELETE запрос
- */
 export function apiDelete(endpoint) {
   return apiRequest(endpoint, {
     method: "DELETE",

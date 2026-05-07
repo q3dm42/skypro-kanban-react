@@ -1,5 +1,3 @@
-import React from "react";
-
 const PopNewCard = () => {
   return (
     <div className="pop-new-card" id="popNewCard">

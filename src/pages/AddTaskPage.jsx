@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HomePage from "./HomePage";
 import TaskCalendar from "../components/TaskCalendar/TaskCalendar";
@@ -13,6 +13,7 @@ const AddTaskPage = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const topics = [
     { id: 1, name: "Web Design", value: "Web Design", color: "_orange" },
@@ -23,21 +24,20 @@ const AddTaskPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setFieldErrors({});
 
-    // Валидация обязательных полей до запроса к API
+    const nextErrors = {};
+
     if (!title.trim()) {
-      setError("Название задачи не должно быть пусто");
-      return;
+      nextErrors.title = "Введите название задачи";
     }
 
     if (!description.trim()) {
-      setError("Описание задачи не должно быть пусто");
-      return;
+      nextErrors.description = "Введите описание задачи";
     }
 
     if (!topic.trim()) {
-      setError("Нужно выбрать категорию задачи");
-      return;
+      nextErrors.topic = "Выберите категорию задачи";
     }
 
     const dateToSend = selectedDate
@@ -45,7 +45,11 @@ const AddTaskPage = () => {
       : new Date().toISOString();
 
     if (!dateToSend) {
-      setError("Нужно указать дату задачи");
+      nextErrors.date = "Выберите дату задачи";
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setFieldErrors(nextErrors);
       return;
     }
 
@@ -112,6 +116,18 @@ const AddTaskPage = () => {
                       onChange={(e) => setTitle(e.target.value)}
                       disabled={loading}
                     />
+                    {fieldErrors.title && (
+                      <p
+                        role="alert"
+                        style={{
+                          color: "#d32f2f",
+                          fontSize: "13px",
+                          marginTop: "6px",
+                        }}
+                      >
+                        {fieldErrors.title}
+                      </p>
+                    )}
                   </div>
                   <div className="form-new__block">
                     <label htmlFor="textArea" className="subttl">
@@ -126,6 +142,18 @@ const AddTaskPage = () => {
                       onChange={(e) => setDescription(e.target.value)}
                       disabled={loading}
                     ></textarea>
+                    {fieldErrors.description && (
+                      <p
+                        role="alert"
+                        style={{
+                          color: "#d32f2f",
+                          fontSize: "13px",
+                          marginTop: "6px",
+                        }}
+                      >
+                        {fieldErrors.description}
+                      </p>
+                    )}
                   </div>
                   <div className="pop-new-card__categories categories">
                     <p className="categories__p subttl">Категория</p>
@@ -144,13 +172,39 @@ const AddTaskPage = () => {
                         </div>
                       ))}
                     </div>
+                    {fieldErrors.topic && (
+                      <p
+                        role="alert"
+                        style={{
+                          color: "#d32f2f",
+                          fontSize: "13px",
+                          marginTop: "8px",
+                        }}
+                      >
+                        {fieldErrors.topic}
+                      </p>
+                    )}
                   </div>
                 </form>
-                <TaskCalendar
-                  selectedDate={selectedDate}
-                  onChange={(date) => setSelectedDate(date)}
-                  withDeadlinePrefix={false}
-                />
+                <div>
+                  <TaskCalendar
+                    selectedDate={selectedDate}
+                    onChange={(date) => setSelectedDate(date)}
+                    withDeadlinePrefix={false}
+                  />
+                  {fieldErrors.date && (
+                    <p
+                      role="alert"
+                      style={{
+                        color: "#d32f2f",
+                        fontSize: "13px",
+                        marginTop: "8px",
+                      }}
+                    >
+                      {fieldErrors.date}
+                    </p>
+                  )}
+                </div>
               </div>
               <div
                 style={{

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import { themeColors } from "../utils/themeColors";
@@ -84,8 +84,8 @@ const Hint = styled.p`
 const ErrorMessage = styled.p`
   color: #d32f2f;
   font-size: 13px;
-  margin-bottom: 16px;
-  text-align: center;
+  margin-top: -8px;
+  margin-bottom: 12px;
 `;
 
 const RegisterPage = () => {
@@ -95,32 +95,49 @@ const RegisterPage = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    setFieldErrors({});
+
+    const nextErrors = {};
+
+    if (!name.trim()) {
+      nextErrors.name = "Введите имя";
+    }
+
+    if (!login.trim()) {
+      nextErrors.login = "Введите логин";
+    }
+
+    if (!password.trim()) {
+      nextErrors.password = "Введите пароль";
+    } else if (password.length < 3) {
+      nextErrors.password = "Пароль должен быть минимум 3 символа";
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setFieldErrors(nextErrors);
+      return;
+    }
+
     setLoading(true);
-
-    // Базовая валидация
-    if (!name.trim() || !login.trim() || !password.trim()) {
-      setError("Все поля должны быть заполнены");
-      setLoading(false);
-      return;
-    }
-
-    if (password.length < 3) {
-      setError("Пароль должен быть минимум 3 символа");
-      setLoading(false);
-      return;
-    }
 
     try {
       const response = await register(name, login, password);
       handleLogin(response?.user);
       navigate("/");
     } catch (err) {
-      setError(err.message || "Ошибка регистрации. Проверьте данные.");
+      if (err.status === 400 || err.status === 409) {
+        setFieldErrors({
+          login: "Пользователь с таким логином уже зарегистрирован",
+        });
+      } else {
+        setError(err.message || "Ошибка регистрации. Проверьте данные.");
+      }
     } finally {
       setLoading(false);
     }
@@ -131,7 +148,7 @@ const RegisterPage = () => {
       <Card>
         <Title>Регистрация</Title>
         <Subtitle>Создайте аккаунт, чтобы управлять задачами.</Subtitle>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+        {error && <ErrorMessage role="alert">{error}</ErrorMessage>}
         <form onSubmit={handleSubmit}>
           <Field>
             Имя
@@ -144,6 +161,9 @@ const RegisterPage = () => {
               disabled={loading}
             />
           </Field>
+          {fieldErrors.name && (
+            <ErrorMessage role="alert">{fieldErrors.name}</ErrorMessage>
+          )}
           <Field>
             Логин
             <input
@@ -155,6 +175,9 @@ const RegisterPage = () => {
               disabled={loading}
             />
           </Field>
+          {fieldErrors.login && (
+            <ErrorMessage role="alert">{fieldErrors.login}</ErrorMessage>
+          )}
           <Field>
             Пароль
             <input
@@ -166,6 +189,9 @@ const RegisterPage = () => {
               disabled={loading}
             />
           </Field>
+          {fieldErrors.password && (
+            <ErrorMessage role="alert">{fieldErrors.password}</ErrorMessage>
+          )}
           <SubmitButton type="submit" disabled={loading}>
             {loading ? "Регистрируемся..." : "Зарегистрироваться"}
           </SubmitButton>

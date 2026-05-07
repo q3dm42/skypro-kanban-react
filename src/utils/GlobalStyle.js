@@ -165,7 +165,7 @@ export const GlobalStyle = createGlobalStyle`
     width: 100%;
     outline: none;
     padding: 14px;
-    background: transparent;
+    background: #eaeef6;
     border: 0.7px solid rgba(148, 166, 190, 0.4);
     border-radius: 8px;
     font-size: 14px;
@@ -183,8 +183,10 @@ export const GlobalStyle = createGlobalStyle`
     resize: none;
   }
 
-  .form-browse__area {
-    background: #eaeef6;
+  p.form-browse__area {
+    background: transparent;
+    height: auto;
+    resize: none;
   }
 
   .categories {

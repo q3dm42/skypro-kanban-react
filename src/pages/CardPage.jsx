@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { parseISO } from "date-fns";
 import HomePage from "./HomePage";
 import TaskCalendar from "../components/TaskCalendar/TaskCalendar";
-import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 import { getTaskById } from "../services/kanban";
 import { useTask } from "../context/TaskContext";
 
@@ -21,6 +20,8 @@ const topicColors = {
   Copywriting: "_purple",
 };
 
+const topics = ["Web Design", "Research", "Copywriting"];
+
 const CardPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -35,9 +36,9 @@ const CardPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
 
-  // Загрузка данных задачи
   useEffect(() => {
     const fetchTask = async () => {
       try {
@@ -48,13 +49,12 @@ const CardPage = () => {
         setStatus(fetchedTask.status || "Без статуса");
         setTopic(fetchedTask.topic || "Research");
 
-        // Парсим дату (API возвращает ISO формат)
         if (fetchedTask.date) {
           try {
             const parsedDate = parseISO(fetchedTask.date);
             setSelectedDate(parsedDate);
           } catch {
-            // Если не удалось спарсить, оставляем null
+            setSelectedDate(null);
           }
         }
       } catch (err) {
@@ -69,25 +69,24 @@ const CardPage = () => {
 
   const handleSave = async () => {
     setError("");
+    setFieldErrors({});
+
+    const nextErrors = {};
 
     if (!title.trim()) {
-      setError("Название задачи не должно быть пусто");
-      return;
+      nextErrors.title = "Введите название задачи";
     }
 
     if (!description.trim()) {
-      setError("Описание задачи не должно быть пусто");
-      return;
+      nextErrors.description = "Введите описание задачи";
     }
 
     if (!topic.trim()) {
-      setError("Категория задачи не должна быть пустой");
-      return;
+      nextErrors.topic = "Выберите категорию задачи";
     }
 
     if (!status.trim()) {
-      setError("Статус задачи не должен быть пустым");
-      return;
+      nextErrors.status = "Выберите статус задачи";
     }
 
     const dateToSend = selectedDate
@@ -95,7 +94,11 @@ const CardPage = () => {
       : task?.date || "";
 
     if (!dateToSend) {
-      setError("Дата задачи не должна быть пустой");
+      nextErrors.date = "Выберите дату задачи";
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setFieldErrors(nextErrors);
       return;
     }
 
@@ -124,7 +127,6 @@ const CardPage = () => {
   };
 
   const handleCancel = () => {
-    // Сбросить изменения к исходным
     setTitle(task.title || "");
     setDescription(task.description || "");
     setStatus(task.status || "Без статуса");
@@ -139,6 +141,7 @@ const CardPage = () => {
     }
     setIsEditing(false);
     setError("");
+    setFieldErrors({});
   };
 
   const handleDelete = async () => {
@@ -176,7 +179,9 @@ const CardPage = () => {
                   minHeight: "300px",
                 }}
               >
-                <LoadingSpinner text="Загружаем задачу..." />
+                <p style={{ color: "#94a6be", fontSize: "14px" }}>
+                  Загружаем задачу...
+                </p>
               </div>
             </div>
           </div>
@@ -241,6 +246,18 @@ const CardPage = () => {
                   </p>
                 </div>
               </div>
+              {fieldErrors.title && (
+                <p
+                  role="alert"
+                  style={{
+                    color: "#d32f2f",
+                    fontSize: "13px",
+                    marginBottom: "12px",
+                  }}
+                >
+                  {fieldErrors.title}
+                </p>
+              )}
               {error && (
                 <p
                   style={{
@@ -281,7 +298,56 @@ const CardPage = () => {
                     </div>
                   )}
                 </div>
+                {fieldErrors.status && (
+                  <p
+                    role="alert"
+                    style={{
+                      color: "#d32f2f",
+                      fontSize: "13px",
+                      marginTop: "8px",
+                    }}
+                  >
+                    {fieldErrors.status}
+                  </p>
+                )}
               </div>
+
+              {isEditing && (
+                <div className="pop-new-card__categories categories">
+                  <p className="categories__p subttl">Категория</p>
+                  <div className="categories__themes">
+                    {topics.map((topicName) => (
+                      <div
+                        key={topicName}
+                        className={`categories__theme ${topicColors[topicName]} ${
+                          topic === topicName ? "_active-category" : ""
+                        }`}
+                        onClick={
+                          saving ? undefined : () => setTopic(topicName)
+                        }
+                        style={{
+                          cursor: saving ? "not-allowed" : "pointer",
+                          opacity: saving ? 0.5 : 1,
+                        }}
+                      >
+                        <p className={topicColors[topicName]}>{topicName}</p>
+                      </div>
+                    ))}
+                  </div>
+                  {fieldErrors.topic && (
+                    <p
+                      role="alert"
+                      style={{
+                        color: "#d32f2f",
+                        fontSize: "13px",
+                        marginTop: "8px",
+                      }}
+                    >
+                      {fieldErrors.topic}
+                    </p>
+                  )}
+                </div>
+              )}
 
               <div className="pop-browse__wrap">
                 <form className="pop-browse__form form-browse">
@@ -310,14 +376,40 @@ const CardPage = () => {
                         {description || "Описание отсутствует"}
                       </p>
                     )}
+                    {fieldErrors.description && (
+                      <p
+                        role="alert"
+                        style={{
+                          color: "#d32f2f",
+                          fontSize: "13px",
+                          marginTop: "8px",
+                        }}
+                      >
+                        {fieldErrors.description}
+                      </p>
+                    )}
                   </div>
                 </form>
-                <TaskCalendar
-                  selectedDate={selectedDate}
-                  onChange={
-                    isEditing ? (date) => setSelectedDate(date) : undefined
-                  }
-                />
+                <div>
+                  <TaskCalendar
+                    selectedDate={selectedDate}
+                    onChange={
+                      isEditing ? (date) => setSelectedDate(date) : undefined
+                    }
+                  />
+                  {fieldErrors.date && (
+                    <p
+                      role="alert"
+                      style={{
+                        color: "#d32f2f",
+                        fontSize: "13px",
+                        marginTop: "8px",
+                      }}
+                    >
+                      {fieldErrors.date}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div className="pop-browse__btn-edit">

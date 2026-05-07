@@ -1,4 +1,3 @@
-import React from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale/ru";

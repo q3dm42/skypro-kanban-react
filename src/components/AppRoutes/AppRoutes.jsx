@@ -1,4 +1,3 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { GlobalStyle } from "../../utils/GlobalStyle";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";

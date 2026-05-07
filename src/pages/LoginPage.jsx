@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import { themeColors } from "../utils/themeColors";
@@ -84,8 +84,8 @@ const Hint = styled.p`
 const ErrorMessage = styled.p`
   color: #d32f2f;
   font-size: 13px;
-  margin-bottom: 16px;
-  text-align: center;
+  margin-top: -8px;
+  margin-bottom: 12px;
 `;
 
 const LoginPage = () => {
@@ -94,19 +94,30 @@ const LoginPage = () => {
   const [loginValue, setLoginValue] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
-    setLoading(true);
+    setFieldErrors({});
 
-    // Базовая валидация
-    if (!loginValue.trim() || !password.trim()) {
-      setError("Логин и пароль не должны быть пусты");
-      setLoading(false);
+    const nextErrors = {};
+
+    if (!loginValue.trim()) {
+      nextErrors.login = "Введите логин";
+    }
+
+    if (!password.trim()) {
+      nextErrors.password = "Введите пароль";
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setFieldErrors(nextErrors);
       return;
     }
+
+    setLoading(true);
 
     try {
       const response = await login(loginValue, password);
@@ -124,7 +135,7 @@ const LoginPage = () => {
       <Card>
         <Title>Вход</Title>
         <Subtitle>Добро пожаловать! Введите данные для входа.</Subtitle>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+        {error && <ErrorMessage role="alert">{error}</ErrorMessage>}
         <form onSubmit={handleSubmit}>
           <Field>
             Логин
@@ -137,6 +148,9 @@ const LoginPage = () => {
               disabled={loading}
             />
           </Field>
+          {fieldErrors.login && (
+            <ErrorMessage role="alert">{fieldErrors.login}</ErrorMessage>
+          )}
           <Field>
             Пароль
             <input
@@ -148,6 +162,9 @@ const LoginPage = () => {
               disabled={loading}
             />
           </Field>
+          {fieldErrors.password && (
+            <ErrorMessage role="alert">{fieldErrors.password}</ErrorMessage>
+          )}
           <SubmitButton type="submit" disabled={loading}>
             {loading ? "Входим..." : "Войти"}
           </SubmitButton>
