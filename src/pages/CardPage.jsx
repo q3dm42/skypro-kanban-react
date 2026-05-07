@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { parseISO } from "date-fns";
 import HomePage from "./HomePage";
 import TaskCalendar from "../components/TaskCalendar/TaskCalendar";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 import { getTaskById } from "../services/kanban";
 import { useTask } from "../context/TaskContext";
 
@@ -168,9 +169,14 @@ const CardPage = () => {
             <div className="pop-browse__block">
               <div
                 className="pop-browse__content"
-                style={{ textAlign: "center", padding: "40px" }}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  minHeight: "300px",
+                }}
               >
-                <p>Загрузка задачи...</p>
+                <LoadingSpinner text="Загружаем задачу..." />
               </div>
             </div>
           </div>
@@ -298,9 +304,7 @@ const CardPage = () => {
                         className="form-browse__area"
                         style={{
                           whiteSpace: "pre-wrap",
-                          border: "none",
-                          padding: "8px",
-                          background: "transparent",
+                          height: "auto",
                         }}
                       >
                         {description || "Описание отсутствует"}

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { formatDate } from "../../utils/formatDate";
 import {
   CardItem,
   CardWrapper,
@@ -56,7 +57,7 @@ const Card = ({ id, theme, themeClass, title, date }) => {
                 </clipPath>
               </defs>
             </svg>
-            <p>{date}</p>
+            <p>{formatDate(date)}</p>
           </CardDate>
         </CardContent>
       </CardWrapper>

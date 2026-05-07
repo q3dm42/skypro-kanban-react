@@ -70,6 +70,9 @@ export function apiGet(endpoint) {
 export function apiPost(endpoint, data) {
   return apiRequest(endpoint, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(data),
   });
 }
@@ -80,6 +83,9 @@ export function apiPost(endpoint, data) {
 export function apiPut(endpoint, data) {
   return apiRequest(endpoint, {
     method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(data),
   });
 }

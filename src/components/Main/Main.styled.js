@@ -60,6 +60,7 @@ export const Loading = styled.div`
   padding: 40px;
   color: ${themeColors.textMuted};
   font-size: 16px;
+  width: 100%;
 
   @media (max-width: 495px) {
     padding: 20px;

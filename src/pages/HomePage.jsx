@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import Header from "../components/Header/Header";
 import Column from "../components/Column/Column";
 import Card from "../components/Card/Card";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
+import EmptyState from "../components/EmptyState/EmptyState";
 import { useTask } from "../context/TaskContext";
 import {
   AppWrapper,
@@ -65,23 +67,23 @@ const HomePage = () => {
           <MainBlock>
             <MainContent>
               {loading ? (
-                <Loading>
-                  <p>Данные загружаются</p>
-                </Loading>
+                <LoadingSpinner text="Загружаем задачи..." />
               ) : error ? (
                 <Loading>
                   <p style={{ color: "#d32f2f" }}>Ошибка: {error}</p>
                 </Loading>
+              ) : tasks.length === 0 ? (
+                <EmptyState text="Новых задач нет" />
               ) : (
-                columns.map((column) => (
-                  <Column
-                    key={column}
-                    title={column}
-                    cards={tasks
-                      .filter((card) => card && card.status === column)
-                      .map(renderCard)}
-                  />
-                ))
+                columns.map((column) => {
+                  const columnCards = tasks
+                    .filter((card) => card && card.status === column)
+                    .map(renderCard);
+
+                  return (
+                    <Column key={column} title={column} cards={columnCards} />
+                  );
+                })
               )}
             </MainContent>
           </MainBlock>
