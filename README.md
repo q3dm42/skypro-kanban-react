@@ -1,16 +1,96 @@
-# React + Vite
+# Sky Words
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sky Words - учебное React-приложение для управления задачами на Kanban-доске. Пользователь может зарегистрироваться, войти в аккаунт, просматривать задачи по статусам, создавать новые карточки, редактировать существующие и удалять их.
 
-Currently, two official plugins are available:
+## Основная функциональность
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Авторизация
 
-## React Compiler
+- регистрация нового пользователя;
+- вход по логину и паролю;
+- выход из аккаунта;
+- сохранение токена и данных пользователя в `localStorage`;
+- защита внутренних маршрутов от неавторизованных пользователей;
+- запрет повторной регистрации с уже занятым логином через обработку ответа API.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Карточки задач
 
-## Expanding the ESLint configuration
+- загрузка задач с API;
+- отображение задач в колонках Kanban-доски;
+- создание задачи с названием, описанием, категорией и датой;
+- редактирование названия, описания, статуса, категории и даты;
+- удаление задачи с подтверждением;
+- перенос карточек между колонками с помощью drag-and-drop;
+- обновление локального списка задач после добавления, редактирования и удаления.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Валидация и ошибки
+
+- проверка пустых полей в формах входа, регистрации, создания и редактирования задачи;
+- вывод ошибок рядом с соответствующими полями;
+- понятные сообщения для сетевых ошибок и ошибок API;
+- блокировка кнопок во время загрузки, сохранения и удаления.
+
+## Дополнительные фичи
+
+- календарь выбора даты на базе `react-datepicker`;
+- форматирование даты карточки в короткий вид;
+- скелетон-загрузчик для состояния загрузки задач;
+- пустое состояние доски, когда задач нет;
+- модальное отображение создания и просмотра задачи поверх главной страницы;
+- цветовая маркировка категорий `Web Design`, `Research` и `Copywriting`;
+- подсветка колонки при перетаскивании карточки;
+- будущие флаги React Router включены для отсутствия warning в консоли.
+
+## Технологии
+
+- React 19;
+- Vite;
+- React Router DOM;
+- Styled Components;
+- date-fns;
+- react-datepicker;
+- ESLint.
+
+## Структура проекта
+
+```text
+src/
+├── components/
+│   ├── AppRoutes/
+│   ├── Card/
+│   ├── Column/
+│   ├── Header/
+│   ├── LoadingSpinner/
+│   └── TaskCalendar/
+├── context/
+│   ├── AuthContext.jsx
+│   └── TaskContext.jsx
+├── pages/
+│   ├── AddTaskPage.jsx
+│   ├── CardPage.jsx
+│   ├── HomePage.jsx
+│   ├── LoginPage.jsx
+│   └── RegisterPage.jsx
+├── services/
+│   ├── api.js
+│   ├── auth.js
+│   └── kanban.js
+└── utils/
+    ├── formatDate.js
+    ├── GlobalStyle.js
+    └── themeColors.js
+```
+
+## Запуск проекта
+
+```bash
+npm install
+npm run dev
+```
+
+## Проверка и сборка
+
+```bash
+npm run lint
+npm run build
+```

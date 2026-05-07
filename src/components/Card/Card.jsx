@@ -1,4 +1,5 @@
-import React from "react";
+import { Link } from "react-router-dom";
+import { formatDate } from "../../utils/formatDate";
 import {
   CardItem,
   CardWrapper,
@@ -10,24 +11,37 @@ import {
   CardBtn,
 } from "./Card.styled";
 
-const Card = ({ theme, themeClass, title, date }) => {
+const Card = ({
+  id,
+  theme,
+  themeClass,
+  title,
+  date,
+  draggable = false,
+  isDragging = false,
+  onDragStart,
+  onDragEnd,
+}) => {
   return (
-    <CardItem>
-      <CardWrapper className={themeClass}>
+    <CardItem className={isDragging ? "_dragging" : ""}>
+      <CardWrapper
+        className={themeClass}
+        draggable={draggable}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+      >
         <CardGroup>
           <CardTheme className={themeClass}>{theme}</CardTheme>
-          <a href="#popBrowse" target="_self">
+          <Link to={`/card/${id}`}>
             <CardBtn>
               <div></div>
               <div></div>
               <div></div>
             </CardBtn>
-          </a>
+          </Link>
         </CardGroup>
         <CardContent>
-          <a href="" target="_blank">
-            <CardTitle>{title}</CardTitle>
-          </a>
+          <CardTitle>{title}</CardTitle>
           <CardDate>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +71,7 @@ const Card = ({ theme, themeClass, title, date }) => {
                 </clipPath>
               </defs>
             </svg>
-            <p>{date}</p>
+            <p>{formatDate(date)}</p>
           </CardDate>
         </CardContent>
       </CardWrapper>

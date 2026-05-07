@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   HeaderWrapper,
   HeaderBlock,
@@ -12,9 +13,14 @@ import {
   PopUserSetTheme,
   PopUserSetBtn,
 } from "./Header.styled";
+import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
+  const { user } = useAuth();
+
+  const userName = user?.name || user?.login || "Пользователь";
+  const userLogin = user?.login || "—";
 
   const toggleUserModal = () => {
     setIsUserModalVisible(!isUserModalVisible);
@@ -24,18 +30,18 @@ const Header = () => {
     <HeaderWrapper>
       <HeaderBlock>
         <HeaderLogo className="_show _light">
-          <a href="" target="_self">
+          <Link to="/">
             <img src="/images/logo.png" alt="logo" />
-          </a>
+          </Link>
         </HeaderLogo>
         <HeaderLogo className="_dark">
-          <a href="" target="_self">
+          <Link to="/">
             <img src="/images/logo_dark.png" alt="logo" />
-          </a>
+          </Link>
         </HeaderLogo>
         <HeaderNav>
-          <HeaderBtnNew id="btnMainNew">
-            <a href="#popNewCard">Создать новую задачу</a>
+          <HeaderBtnNew id="btnMainNew" to="/card/new">
+            Создать новую задачу
           </HeaderBtnNew>
           <HeaderUser
             href="#"
@@ -44,18 +50,16 @@ const Header = () => {
               toggleUserModal();
             }}
           >
-            Ivan Ivanov
+            {userName}
           </HeaderUser>
           <PopUserSet className={isUserModalVisible ? "active" : ""}>
-            <PopUserSetName>Ivan Ivanov</PopUserSetName>
-            <PopUserSetMail>ivan.ivanov@gmail.com</PopUserSetMail>
+            <PopUserSetName>{userName}</PopUserSetName>
+            <PopUserSetMail>{userLogin}</PopUserSetMail>
             <PopUserSetTheme>
               <p>Темная тема</p>
               <input type="checkbox" name="checkbox" />
             </PopUserSetTheme>
-            <PopUserSetBtn type="button">
-              <a href="#popExit">Выйти</a>
-            </PopUserSetBtn>
+            <PopUserSetBtn to="/exit">Выйти</PopUserSetBtn>
           </PopUserSet>
         </HeaderNav>
       </HeaderBlock>

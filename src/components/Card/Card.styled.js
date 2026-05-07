@@ -5,6 +5,14 @@ export const CardItem = styled.div`
   animation-name: card-animation;
   animation-duration: 500ms;
   animation-timing-function: linear;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+
+  &._dragging {
+    opacity: 0.45;
+    transform: rotate(1deg);
+  }
 `;
 
 export const CardWrapper = styled.div`
@@ -19,6 +27,14 @@ export const CardWrapper = styled.div`
   padding: 15px 13px 19px;
   cursor: pointer;
   transition: box-shadow 0.2s ease-in-out;
+
+  &[draggable="true"] {
+    cursor: grab;
+  }
+
+  &[draggable="true"]:active {
+    cursor: grabbing;
+  }
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -40,7 +56,7 @@ export const CardTheme = styled.div`
   padding: 5px 14px;
   border-radius: 18px;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 
@@ -67,7 +83,7 @@ export const CardTheme = styled.div`
 
 export const CardTitle = styled.h3`
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: #000000;
   margin: 0;
   line-height: 1.3;

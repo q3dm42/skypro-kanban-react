@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { themeColors } from "../../utils/themeColors";
 
 export const HeaderWrapper = styled.header`
@@ -47,7 +48,7 @@ export const HeaderNav = styled.nav`
   justify-content: center;
 `;
 
-export const HeaderBtnNew = styled.button`
+export const HeaderBtnNew = styled(Link)`
   width: 178px;
   height: 30px;
   border-radius: 4px;
@@ -59,10 +60,9 @@ export const HeaderBtnNew = styled.button`
   font-weight: 500;
   margin-right: 20px;
   cursor: pointer;
-
-  a {
-    color: ${themeColors.textLight};
-  }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: ${themeColors.primaryDark};
@@ -205,7 +205,7 @@ export const PopUserSetTheme = styled.div`
   }
 `;
 
-export const PopUserSetBtn = styled.button`
+export const PopUserSetBtn = styled(Link)`
   width: 72px;
   height: 30px;
   background: transparent;
@@ -213,18 +213,13 @@ export const PopUserSetBtn = styled.button`
   border-radius: 4px;
   border: 1px solid ${themeColors.primary};
   cursor: pointer;
-
-  a {
-    color: ${themeColors.primary};
-  }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: ${themeColors.primaryDark};
     color: ${themeColors.textLight};
     border-color: ${themeColors.primaryDark};
-
-    a {
-      color: ${themeColors.textLight};
-    }
   }
 `;
