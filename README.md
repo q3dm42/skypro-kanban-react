@@ -1,16 +1,162 @@
-# React + Vite
+# sky-words - Kanban Board Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Приложение для управления задачами с использованием Kanban доски. Позволяет создавать, редактировать, удалять и перемещать задачи между статусами с помощью drag-and-drop функциональности.
 
-Currently, two official plugins are available:
+## 🎯 Основные функции
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Аутентификация
+- ✅ Регистрация новых пользователей
+- ✅ Вход в аккаунт
+- ✅ Выход из аккаунта
+- ✅ Валидация данных с отображением ошибок
+- ✅ Защита маршрутов (Protected Routes)
 
-## React Compiler
+### Управление задачами
+- ✅ **Добавление задач** - создание новой задачи с названием, описанием, категорией и датой
+- ✅ **Просмотр задач** - отображение всех задач на Kanban доске по статусам
+- ✅ **Редактирование задач** - изменение всех параметров существующей задачи
+- ✅ **Удаление задач** - удаление задачи с подтверждением
+- ✅ **Drag-and-drop** - перемещение задач между статусами
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Функциональность задач
+- Статусы: Без статуса, Нужно сделать, В работе, Тестирование, Готово
+- Категории: Web Design, Research, Copywriting
+- Даты выполнения с календарным интерфейсом
+- Цветовая кодировка по категориям
 
-## Expanding the ESLint configuration
+### Интерфейс
+- ✅ **Темы оформления** - светлая и темная тема
+- ✅ **Профиль пользователя** - отображение имени и почты, смена темы, выход
+- ✅ **Загрузчик** - градиентный лоадер при загрузке данных
+- ✅ **Валидация форм** - ясные сообщения об ошибках
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Технологический стек
+
+- **React 19** - библиотека для создания UI
+- **Vite** - быстрый сборщик приложений
+- **React Router v6** - маршрутизация
+- **Styled Components** - стилизация компонентов
+- **date-fns** - работа с датами
+- **react-datepicker** - календарный компонент
+
+## 📋 Структура проекта
+
+```
+src/
+├── components/          # Компоненты приложения
+│   ├── Card/           # Карточка задачи
+│   ├── Column/         # Колонка статуса
+│   ├── Header/         # Верхняя панель
+│   ├── TaskCalendar/   # Календарь
+│   ├── LoadingSpinner/ # Лоадер
+│   └── ...
+├── pages/              # Страницы приложения
+│   ├── LoginPage.jsx
+│   ├── RegisterPage.jsx
+│   ├── HomePage.jsx
+│   ├── CardPage.jsx
+│   └── AddTaskPage.jsx
+├── services/           # API сервисы
+│   ├── api.js         # Базовые API методы
+│   ├── auth.js        # Аутентификация
+│   └── kanban.js      # Управление задачами
+├── context/            # React Context
+│   ├── AuthContext.jsx
+│   └── TaskContext.jsx
+└── utils/              # Утилиты
+    ├── GlobalStyle.js
+    ├── themeColors.js
+    └── formatDate.js
+```
+
+## 🚀 Установка и запуск
+
+### Требования
+- Node.js 14+
+- npm или yarn
+
+### Инструкции
+```bash
+# Установка зависимостей
+npm install
+
+# Запуск в режиме разработки
+npm run dev
+
+# Сборка для продакшена
+npm run build
+
+# Предпросмотр собранного приложения
+npm run preview
+
+# Проверка кода
+npm run lint
+```
+
+## 🎨 Дополнительные фичи
+
+### Реализованные
+- ✅ Полная валидация форм с ясными сообщениями об ошибках
+- ✅ Состояния загрузки (loading, saving) с отключением кнопок
+- ✅ Обработка ошибок API с информативными сообщениями
+- ✅ Сохранение токена аутентификации в localStorage
+- ✅ Защита от случайного создания пустых полей
+- ✅ Календарный интерфейс для выбора даты
+- ✅ Компонент LoadingSpinner для отображения процесса загрузки
+- ✅ Стандартизированные стили ошибок (красная обводка, сообщение)
+- ✅ Поддержка темной темы оформления
+- ✅ Бордеры полей в режиме просмотра и редактирования
+
+## 📝 Примеры использования
+
+### Создание задачи
+1. Нажмите кнопку "Создать новую задачу"
+2. Заполните все поля формы
+3. Нажмите "Создать"
+
+### Редактирование задачи
+1. Нажмите на задачу на доске
+2. Нажмите "Редактировать"
+3. Измените нужные поля
+4. Нажмите "Сохранить"
+
+### Перемещение задачи
+1. На главной странице нажмите и удерживайте задачу
+2. Перетащите её в нужную колонку
+3. Отпустите - задача переместится
+
+## 🔒 Безопасность
+
+- Все пароли хешируются на сервере
+- Токены хранятся в localStorage
+- Защита от повторной регистрации
+- CORS поддержка
+- Валидация всех входных данных
+
+## ⚠️ Обработка ошибок
+
+Приложение обеспечивает четкую обработку ошибок:
+- Валидация пустых полей
+- Проверка формата email
+- Минимальная длина пароля
+- Обработка сетевых ошибок
+- Информативные сообщения об ошибках
+
+## 📱 Адаптивность
+
+Приложение полностью адаптировано для:
+- Десктопов (1920px и выше)
+- Планшетов (768px и выше)
+- Мобильных устройств (320px и выше)
+
+## 🐛 Известные проблемы
+
+На данный момент нет известных проблем.
+
+## 📄 Лицензия
+
+Образовательный проект для курса React.
+
+## 👨‍💻 Автор
+
+Проект разработан как часть курса React на платформе SkyPro.
